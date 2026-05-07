@@ -1,4 +1,4 @@
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel, EmailStr, ConfigDict
 from typing import Optional
 
 
@@ -21,8 +21,7 @@ class UserResponse(BaseModel):
     email: str
     role: str
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 
 # --- Token Schemas ---
@@ -44,3 +43,26 @@ class RefreshRequest(BaseModel):
 class TokenData(BaseModel):
     username: Optional[str] = None
     role: Optional[str] = None
+    
+# --- Student Schemas ---
+
+class StudentCreate(BaseModel):
+    name: str
+    department: str
+    gpa: float
+
+
+class StudentUpdate(BaseModel):
+    name: str
+    department: str
+    gpa: float
+
+
+class StudentResponse(BaseModel):
+    id: int
+    name: str
+    department: str
+    gpa: float
+    owner_id: int
+
+    model_config = ConfigDict(from_attributes=True)

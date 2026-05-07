@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Monitoring Dashboard</title>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      background: #0f172a;
+      color: white;
+      min-height: 100vh;
+      padding: 40px;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: auto;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 40px;
+      font-size: 42px;
+      color: #38bdf8;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 20px;
+    }
+
+    .card {
+      background: #1e293b;
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+      transition: 0.3s;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+    }
+
+    .card h2 {
+      font-size: 20px;
+      margin-bottom: 15px;
+      color: #cbd5e1;
+    }
+
+    .number {
+      font-size: 40px;
+      font-weight: bold;
+      color: #38bdf8;
+    }
+
+    .status {
+      margin-top: 40px;
+      background: #1e293b;
+      padding: 25px;
+      border-radius: 20px;
+      text-align: center;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+    }
+
+    .healthy {
+      color: #22c55e;
+      font-size: 28px;
+      font-weight: bold;
+    }
+
+    .footer {
+      text-align: center;
+      margin-top: 30px;
+      color: #94a3b8;
+    }
+
+    button {
+      margin-top: 25px;
+      padding: 12px 25px;
+      border: none;
+      border-radius: 12px;
+      background: #38bdf8;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      background: #0ea5e9;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+
+    <h1>Monitoring Dashboard</h1>
+
+    <div class="grid">
+
+      <div class="card">
+        <h2>Total Requests</h2>
+        <div class="number" id="requests">0</div>
+      </div>
+
+      <div class="card">
+        <h2>Cache Hits</h2>
+        <div class="number" id="cache">0</div>
+      </div>
+
+      <div class="card">
+        <h2>Errors</h2>
+        <div class="number" id="errors">0</div>
+      </div>
+
+      <div class="card">
+        <h2>Response Time</h2>
+        <div class="number" id="response">0s</div>
+      </div>
+
+    </div>
+
+    <div class="status">
+      <h2>System Status</h2>
+      <p class="healthy" id="status">Healthy</p>
+
+      <button onclick="loadMetrics()">
+        Refresh Metrics
+      </button>
+    </div>
+
+    <div class="footer">
+      Student Management System Monitoring Dashboard
+    </div>
+
+  </div>
+
+  <script>
+    async function loadMetrics() {
+      try {
+
+        const response = await fetch('http://127.0.0.1:8000/metrics');
+        const data = await response.json();
+
+        document.getElementById('requests').innerText =
+          data.metrics.total_requests;
+
+        document.getElementById('cache').innerText =
+          data.metrics.cache_hits;
+
+        document.getElementById('errors').innerText =
+          data.metrics.errors;
+
+        document.getElementById('response').innerText =
+          data.metrics.response_time + "s";
+
+        document.getElementById('status').innerText =
+          data.status;
+
+      } catch (error) {
+        console.error(error);
+      }
+    }
+
+    loadMetrics();
+
+    setInterval(loadMetrics, 5000);
+  </script>
+
+</body>
+</html>
+
+<!-- TO TEST:
+http://127.0.0.1:8000/dashboard
+-->
