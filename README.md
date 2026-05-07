@@ -57,7 +57,7 @@ app/
 ## 1) Clone the repository
 
 ```bash
-git clone <>
+git clone <https://github.com/saraamged076/Student_Management>
 cd student_management
 ```
 
