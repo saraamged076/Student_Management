@@ -1,6 +1,6 @@
-﻿# Student Management System
+# Student Management System
 
-A backend REST API project built using FastAPI for managing students with authentication, authorization, Redis caching, logging, and testing.
+A backend REST API project built using FastAPI for managing students with authentication, authorization, Redis caching, logging, monitoring, and testing.
 
 ---
 
@@ -13,8 +13,11 @@ A backend REST API project built using FastAPI for managing students with authen
 * CRUD Operations for Students
 * Ownership Authorization
 * Redis Caching
+* Cache-Aside Pattern
 * Cache Invalidation
 * Logging System
+* Monitoring Dashboard
+* Response Time Monitoring
 * API Testing with Pytest
 * Swagger API Documentation
 
@@ -30,6 +33,9 @@ A backend REST API project built using FastAPI for managing students with authen
 * JWT Authentication
 * Redis
 * Pytest
+* HTML
+* CSS
+* JavaScript
 
 ---
 
@@ -47,7 +53,11 @@ app/
 ├── database.py
 ├── redis_client.py
 ├── logging_config.py
+├── monitoring.py
 └── main.py
+
+templates/
+└── dashboard.html
 ```
 
 ---
@@ -57,7 +67,7 @@ app/
 ## 1) Clone the repository
 
 ```bash
-git clone <https://github.com/saraamged076/Student_Management>
+git clone https://github.com/saraamged076/Student_Management
 cd student_management
 ```
 
@@ -115,6 +125,30 @@ http://127.0.0.1:8000/docs
 
 ---
 
+# Monitoring Dashboard
+
+Dashboard URL:
+
+```text
+http://127.0.0.1:8000/dashboard
+```
+
+The dashboard displays:
+
+* Total API Requests
+* Cache Hits
+* Error Count
+* Response Time
+* System Health Status
+
+Metrics Endpoint:
+
+```http
+GET /metrics
+```
+
+---
+
 # Authentication System
 
 The project uses JWT Authentication.
@@ -153,6 +187,7 @@ The project uses Redis to cache:
 
 ```http
 GET /students
+GET /students/{id}
 ```
 
 ## Cache Strategy
@@ -178,13 +213,27 @@ The cache is cleared using:
 
 ```python
 redis_client.delete("students")
+redis_client.delete(f"student:{student_id}")
 ```
 
 ---
 
 # Logging System
 
-The project logs important operations into:
+The application uses Python logging to track:
+
+* CRUD operations
+* Errors and exceptions
+* Authentication events
+* Request monitoring
+
+Log levels used:
+
+* INFO
+* WARNING
+* ERROR
+
+Logs are stored inside:
 
 ```text
 app.log
@@ -210,6 +259,17 @@ Run tests:
 python -m pytest
 ```
 
+The test suite covers:
+
+* Authentication tests
+* Authorization tests
+* CRUD operations
+* Edge cases
+* Error handling
+* Invalid login attempts
+* Duplicate users
+* Missing resources
+
 ---
 
 # Main Endpoints
@@ -221,6 +281,7 @@ POST /auth/register
 POST /auth/login
 POST /auth/refresh
 GET /auth/me
+GET /auth/admin-only
 ```
 
 ---
@@ -229,14 +290,26 @@ GET /auth/me
 
 ```http
 GET /students
-POST /students
 GET /students/{id}
+POST /students
 PUT /students/{id}
 DELETE /students/{id}
 ```
 
 ---
 
+# Monitoring Features
+
+The system tracks:
+
+* Total Requests
+* Cache Hits
+* Error Counts
+* API Response Time
+* System Health Status
+
+---
+
 # Author
 
-Developed as a backend learning project using FastAPI and modern backend development co
+Developed as a backend learning project using FastAPI and modern backend development concepts.
