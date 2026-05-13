@@ -2,7 +2,7 @@ from fastapi import FastAPI, Depends, Request
 from fastapi.responses import HTMLResponse
 from sqlalchemy.orm import Session
 import time
-
+from fastapi.middleware.cors import CORSMiddleware
 from app.database import engine, Base, get_db
 from app.models import models
 
@@ -18,11 +18,20 @@ Base.metadata.create_all(bind=engine)
 
 # app
 app = FastAPI(title="Student Management System")
-
+app = FastAPI(title="Student Management System")
 # include routers
 app.include_router(auth_router)
 app.include_router(student_router)
 
+
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 # metrics
 metrics_data = {
     "total_requests": 0,
